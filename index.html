@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101a2b"><title>Penjernih Gambar AI HD</title>
+<style>
+:root{color-scheme:dark;--bg:#0a1220;--panel:#121f33;--line:#2b405d;--text:#eff6ff;--muted:#a8bad2;--mint:#5be2bb;--blue:#69adff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1b3150 0,#0a1220 65%);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);min-height:100vh}header{text-align:center;padding:26px 16px 15px}header .icon{font-size:38px}h1{font-size:clamp(25px,6vw,36px);margin:5px 0}p{color:var(--muted);line-height:1.5}main{width:min(900px,100%);margin:auto;padding:12px;display:grid;gap:14px}.panel{background:#121f33ed;border:1px solid var(--line);border-radius:20px;padding:17px;box-shadow:0 14px 35px #0002}h2{font-size:18px;margin:0 0 14px}.upload{display:block;border:2px dashed #496584;background:#0d192a;border-radius:16px;padding:23px 12px;text-align:center;cursor:pointer}.upload b{display:block;margin:7px}.upload small{color:var(--muted)}input[type=file]{display:none}.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:7px}.field select,.field input[type=text]{width:100%;background:#0b1728;color:var(--text);border:1px solid #3a506d;border-radius:10px;padding:12px;font:inherit}.check{display:flex;align-items:center;gap:9px;margin-top:14px;color:var(--muted);font-size:14px}.check input{accent-color:var(--mint);width:18px;height:18px}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}button{font:700 14px system-ui;border:0;border-radius:12px;padding:14px 16px;cursor:pointer;flex:1;min-width:140px;background:var(--mint);color:#06251c}button.secondary{background:#263b57;color:var(--text);border:1px solid #405875}button:disabled{opacity:.45;cursor:not-allowed}.status{font-size:13px;min-height:20px;margin-top:12px;color:var(--muted)}.status.error{color:#ff9c9c}.status.good{color:var(--mint)}.previews{display:grid;grid-template-columns:1fr 1fr;gap:10px}.preview{background:#091321;border:1px solid #263a55;border-radius:13px;overflow:hidden;min-width:0}.preview h3{font-size:12px;text-align:center;letter-spacing:.05em;background:#182941;padding:10px;margin:0}.imgarea{min-height:180px;height:clamp(180px,35vw,330px);display:flex;align-items:center;justify-content:center;padding:8px}.imgarea img{max-width:100%;max-height:100%;object-fit:contain}.placeholder{color:#758aa5;font-size:12px;text-align:center;padding:15px}.progress{height:6px;background:#263952;border-radius:20px;overflow:hidden;margin-top:10px;display:none}.progress span{display:block;height:100%;width:20%;background:var(--mint);animation:progress 1.4s ease-in-out infinite alternate}@keyframes progress{to{width:92%}}.foot{font-size:12px;color:var(--muted);line-height:1.6}.hidden{display:none!important}
+@media(max-width:430px){.panel{padding:13px}.previews{grid-template-columns:1fr}.imgarea{height:240px}.options{gap:9px}}
+</style>
+</head>
+<body>
+<header><div class="icon">✨</div><h1>Penjernih Gambar AI HD</h1><p>Perjelas foto buram dan tingkatkan resolusi dengan model AI.</p></header>
+<main>
+<section class="panel">
+<h2>1. Pilih foto</h2>
+<label class="upload" for="photo"><span style="font-size:30px">🖼️</span><b>Ketuk untuk memilih gambar</b><small>JPG, PNG, atau WebP · Maksimum 10 MB</small></label>
+<input id="photo" type="file" accept="image/jpeg,image/png,image/webp">
+<div id="picked" class="status">Belum ada gambar dipilih.</div>
+</section>
+<section class="panel">
+<h2>2. Pengaturan AI</h2>
+<div class="options">
+<div class="field"><label for="scale">Peningkatan resolusi</label><select id="scale"><option value="2">2× — disarankan</option><option value="4">4× — file lebih besar</option></select></div>
+<div class="field"><label for="format">Format hasil</label><select id="format"><option value="png">PNG</option><option value="jpg">JPG</option></select></div>
+</div>
+<label class="check"><input id="face" type="checkbox" checked> Tingkatkan detail wajah (jika didukung model)</label>
+<div class="buttons"><button id="enhance" disabled>✨ Jernihkan dengan AI</button><button id="clear" class="secondary">Reset</button></div>
+<div class="progress" id="progress"><span></span></div>
+<div id="status" class="status">Pilih foto untuk memulai.</div>
+</section>
+<section class="panel">
+<h2>3. Bandingkan hasil</h2>
+<div class="previews">
+<div class="preview"><h3>FOTO ASLI</h3><div class="imgarea" id="originalArea"><div class="placeholder">Foto asli akan tampil di sini</div></div></div>
+<div class="preview"><h3>HASIL AI HD</h3><div class="imgarea" id="resultArea"><div class="placeholder">Hasil AI akan tampil di sini</div></div></div>
+</div>
+<div class="buttons"><button id="download" disabled>⬇ Simpan hasil</button></div>
+</section>
+<section class="panel foot"><b>Catatan penting</b><br>Penjernihan AI sungguhan membutuhkan koneksi internet dan API token dari penyedia model. Token disimpan di server, bukan di browser. AI dapat memperkirakan detail yang hilang; hasil wajah atau teks yang sangat buram tidak selalu akurat. Foto dikirim ke penyedia AI untuk diproses.</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);let file=null,originalUrl=null,resultUrl=null;
+function status(msg,type=''){const e=$('status');e.textContent=msg;e.className='status '+type}
+function clearResult(){if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null} $('resultArea').innerHTML='<div class="placeholder">Hasil AI akan tampil di sini</div>';$('download').disabled=true}
+$('photo').addEventListener('change',()=>{const f=$('photo').files[0];if(!f)return;if(!/^image\/(jpeg|png|webp)$/.test(f.type)){status('Format tidak didukung. Gunakan JPG, PNG, atau WebP.','error');return}if(f.size>10*1024*1024){status('Ukuran file lebih dari 10 MB. Pilih gambar yang lebih kecil.','error');return}file=f;if(originalUrl)URL.revokeObjectURL(originalUrl);originalUrl=URL.createObjectURL(f);$('originalArea').innerHTML='';const im=new Image();im.src=originalUrl;im.alt='Foto asli';$('originalArea').append(im);$('picked').textContent=`Dipilih: ${f.name} (${(f.size/1024/1024).toFixed(2)} MB)`;$('enhance').disabled=false;clearResult();status('Foto siap diproses.','good')});
+$('enhance').addEventListener('click',async()=>{if(!file)return;const btn=$('enhance');btn.disabled=true;$('progress').style.display='block';clearResult();status('Mengirim gambar ke model AI… proses bisa memerlukan waktu 10–90 detik.');try{const fd=new FormData();fd.append('image',file);fd.append('scale',$('scale').value);fd.append('face_enhance',$('face').checked?'true':'false');fd.append('format',$('format').value);const response=await fetch('/api/enhance',{method:'POST',body:fd});if(!response.ok){let msg='Pemrosesan AI gagal.';try{const j=await response.json();msg=j.detail||j.error||msg}catch{}throw new Error(msg)}const blob=await response.blob();resultUrl=URL.createObjectURL(blob);const im=new Image();im.alt='Hasil penjernihan AI';im.src=resultUrl;$('resultArea').innerHTML='';$('resultArea').append(im);$('download').disabled=false;status('Selesai! Periksa hasil, lalu simpan ke perangkat.','good')}catch(e){status(e.message.includes('Failed to fetch')?'Server tidak terhubung. Pastikan aplikasi dijalankan melalui server sesuai petunjuk README.':e.message,'error')}finally{btn.disabled=false;$('progress').style.display='none'}});
+$('download').addEventListener('click',()=>{if(!resultUrl)return;const a=document.createElement('a');a.href=resultUrl;a.download='gambar-jernih-ai-hd.'+ $('format').value;a.click()});
+$('clear').addEventListener('click',()=>{file=null;$('photo').value='';if(originalUrl)URL.revokeObjectURL(originalUrl);originalUrl=null;clearResult();$('originalArea').innerHTML='<div class="placeholder">Foto asli akan tampil di sini</div>';$('picked').textContent='Belum ada gambar dipilih.';$('enhance').disabled=true;status('Pilih foto untuk memulai.')});
+</script>
+</body></html>
